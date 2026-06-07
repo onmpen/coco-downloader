@@ -1,0 +1,26 @@
+QScrollArea {
+    border: none;
+    background-color: transparent;
+}
+
+#scrollWidget {
+    background-color: transparent;
+}
+
+/* Search Card */
+SearchCard #titleLabel {
+    color: black;
+}
+
+SearchCard #descLabel {
+    color: rgba(0, 0, 0, 140);
+}
+
+/* Placeholder Widget */
+PlaceholderWidget #titleLabel {
+    color: black;
+}
+
+PlaceholderWidget #descLabel {
+    color: rgba(0, 0, 0, 140);
+}

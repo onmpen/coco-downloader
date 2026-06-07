@@ -5,11 +5,16 @@
         <file>images/icons/Settings_white.svg</file>
         <file>images/icons/Settings_black.svg</file>
         <file>images/logo.png</file>
+        <file>images/undraw_location-search.svg</file>
 
         <file>i18n/app.zh_CN.qm</file>
         <file>i18n/app.zh_HK.qm</file>
 
+        <file>qss/light/home_interface.qss</file>
+        <file>qss/dark/home_interface.qss</file>
         <file>qss/light/setting_interface.qss</file>
         <file>qss/dark/setting_interface.qss</file>
+        <file>qss/light/main_window.qss</file>
+        <file>qss/dark/main_window.qss</file>
     </qresource>
 </RCC>

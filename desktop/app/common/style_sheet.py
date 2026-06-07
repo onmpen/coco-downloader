@@ -8,7 +8,8 @@ class StyleSheet(StyleSheetBase, Enum):
     """ Style sheet  """
 
     # TODO: Add your qss here
-    
+
+    HOME_INTERFACE = "home_interface"
     SETTING_INTERFACE = "setting_interface"
 
     def path(self, theme=Theme.AUTO):

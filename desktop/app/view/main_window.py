@@ -1,13 +1,14 @@
 # coding: utf-8
-from PyQt5.QtCore import Qt, QSize, QEasingCurve
+from PyQt5.QtCore import Qt, QSize, QEasingCurve, QFile, QTextStream
 from PyQt5.QtGui import QIcon, QColor
-from PyQt5.QtWidgets import QApplication, QHBoxLayout, QVBoxLayout, QFrame, QWidget
+from PyQt5.QtWidgets import QApplication, QHBoxLayout, QVBoxLayout, QFrame, QWidget, QLabel
 
-from qfluentwidgets import (NavigationBar, NavigationItemPosition, SplashScreen,
-                            PopUpAniStackedWidget, SearchLineEdit)
+from qfluentwidgets import (NavigationBar, NavigationItemPosition, SplashScreen, isDarkTheme,
+                            PopUpAniStackedWidget)
 from qfluentwidgets import FluentIcon as FIF
 from qframelesswindow import FramelessWindow, TitleBar
 
+from .home_interface import HomeInterface
 from .setting_interface import SettingInterface
 from ..common.config import cfg
 from ..common.icon import Icon
@@ -50,10 +51,16 @@ class CustomTitleBar(TitleBar):
         self.hBoxLayout.removeWidget(self.maxBtn)
         self.hBoxLayout.removeWidget(self.closeBtn)
 
-        self.iconLabel = QWidget(self)
+        self.iconLabel = QLabel(self)
         self.iconLabel.setFixedSize(18, 18)
         self.hBoxLayout.insertSpacing(0, 20)
         self.hBoxLayout.insertWidget(1, self.iconLabel, 0, Qt.AlignLeft | Qt.AlignVCenter)
+        self.window().windowIconChanged.connect(self.setIcon)
+
+        self.titleLabel = QLabel(self)
+        self.hBoxLayout.insertWidget(2, self.titleLabel, 0, Qt.AlignLeft | Qt.AlignVCenter)
+        self.titleLabel.setObjectName('titleLabel')
+        self.window().windowTitleChanged.connect(self.setTitle)
 
         self.vBoxLayout = QVBoxLayout()
         self.buttonLayout = QHBoxLayout()
@@ -66,6 +73,13 @@ class CustomTitleBar(TitleBar):
         self.vBoxLayout.addLayout(self.buttonLayout)
         self.vBoxLayout.addStretch(1)
         self.hBoxLayout.addLayout(self.vBoxLayout, 0)
+
+    def setTitle(self, title):
+        self.titleLabel.setText(title)
+        self.titleLabel.adjustSize()
+
+    def setIcon(self, icon):
+        self.iconLabel.setPixmap(QIcon(icon).pixmap(18, 18))
 
 
 class PlayerBar(QFrame):
@@ -92,6 +106,7 @@ class MainWindow(FramelessWindow):
         self.stackedWidget = StackedWidget(self)
         self.playerBar = PlayerBar(self)
 
+        self.homeInterface = HomeInterface(self)
         self.settingInterface = SettingInterface(self)
 
         self.initLayout()
@@ -102,6 +117,7 @@ class MainWindow(FramelessWindow):
     def connectSignalToSlot(self):
         signalBus.micaEnableChanged.connect(lambda x: None)
         self.stackedWidget.view.currentChanged.connect(self.onCurrentInterfaceChanged)
+        cfg.themeChanged.connect(self.setQss)
 
     def initLayout(self):
         centralWidget = QWidget(self)
@@ -123,6 +139,13 @@ class MainWindow(FramelessWindow):
 
     def initNavigation(self):
         self.addSubInterface(
+            self.homeInterface,
+            FIF.HOME,
+            '首页',
+            FIF.HOME_FILL
+        )
+
+        self.addSubInterface(
             self.settingInterface,
             Icon.SETTINGS,
             self.tr('Settings'),
@@ -130,7 +153,7 @@ class MainWindow(FramelessWindow):
             NavigationItemPosition.BOTTOM
         )
 
-        self.navigationBar.setCurrentItem(self.settingInterface.objectName())
+        self.navigationBar.setCurrentItem(self.homeInterface.objectName())
 
     def initWindow(self):
         self.resize(960, 780)
@@ -138,6 +161,8 @@ class MainWindow(FramelessWindow):
         self.setWindowIcon(QIcon(':/app/images/logo.png'))
         self.setWindowTitle('Coco Downloader')
         self.titleBar.setAttribute(Qt.WA_StyledBackground)
+
+        self.setQss()
 
         self.splashScreen = SplashScreen(self.windowIcon(), self)
         self.splashScreen.setIconSize(QSize(106, 106))
@@ -168,6 +193,16 @@ class MainWindow(FramelessWindow):
     def onCurrentInterfaceChanged(self, index):
         widget = self.stackedWidget.widget(index)
         self.navigationBar.setCurrentItem(widget.objectName())
+
+    def setQss(self):
+        theme = 'dark' if isDarkTheme() else 'light'
+        qss_path = f':/app/qss/{theme}/main_window.qss'
+        qss_file = QFile(qss_path)
+        if qss_file.open(QFile.ReadOnly | QFile.Text):
+            stream = QTextStream(qss_file)
+            stream.setCodec('UTF-8')
+            self.setStyleSheet(stream.readAll())
+            qss_file.close()
 
     def resizeEvent(self, e):
         super().resizeEvent(e)

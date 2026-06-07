@@ -1,0 +1,88 @@
+# coding: utf-8
+from PyQt5.QtCore import Qt, pyqtSignal
+from PyQt5.QtGui import QFont
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel
+
+from qfluentwidgets import SimpleCardWidget, SearchLineEdit, ComboBox, setFont
+
+
+class SearchCard(SimpleCardWidget):
+    """Search card with search input and platform selector"""
+
+    searchRequested = pyqtSignal(str, str)
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setFixedHeight(200)
+
+        self.vBoxLayout = QVBoxLayout(self)
+        self.titleLabel = QLabel(self.tr("发现你的音乐世界"), self)
+        self.descLabel = QLabel(
+            self.tr("无论是熟悉的旋律，还是未知的惊喜，都在这里等你探索 ✨"),
+            self
+        )
+
+        self.searchLayout = QHBoxLayout()
+        self.searchInput = SearchLineEdit(self)
+        self.platformComboBox = ComboBox(self)
+
+        self._init_ui()
+        self._connect_signals()
+
+    def _init_ui(self):
+        setFont(self.titleLabel, 24, QFont.Weight.Bold)
+        setFont(self.descLabel, 14, QFont.Weight.Normal)
+
+        self.titleLabel.setObjectName('titleLabel')
+        self.descLabel.setObjectName('descLabel')
+        self.titleLabel.setAlignment(Qt.AlignCenter)
+        self.descLabel.setAlignment(Qt.AlignCenter)
+
+        self.searchInput.setPlaceholderText(self.tr("搜索歌曲、歌手或专辑..."))
+        self.searchInput.setFixedHeight(40)
+        self.searchInput.searchSignal.connect(self._on_search)
+
+        self.platformComboBox.setFixedWidth(150)
+        self.platformComboBox.setFixedHeight(40)
+        self.platformComboBox.addItems([
+            self.tr("歌曲宝"),
+            self.tr("歌曲海"),
+            self.tr("布谷"),
+            self.tr("波点"),
+            self.tr("QQ音乐"),
+            self.tr("QQ音乐(MP3)"),
+            self.tr("米兔"),
+            self.tr("JOOX"),
+            self.tr("咪咕"),
+            self.tr("力音"),
+            self.tr("爱听"),
+            self.tr("煎饼-网易云"),
+            self.tr("煎饼-QQ"),
+            self.tr("煎饼-酷狗"),
+            self.tr("煎饼-酷我"),
+        ])
+        self.platformComboBox.setCurrentIndex(0)
+
+        self.searchLayout.setSpacing(12)
+        self.searchLayout.addWidget(self.searchInput, 1)
+        self.searchLayout.addWidget(self.platformComboBox)
+
+        self.vBoxLayout.setContentsMargins(24, 24, 24, 24)
+        self.vBoxLayout.setSpacing(12)
+        self.vBoxLayout.addWidget(self.titleLabel)
+        self.vBoxLayout.addWidget(self.descLabel)
+        self.vBoxLayout.addSpacing(8)
+        self.vBoxLayout.addLayout(self.searchLayout)
+
+    def _connect_signals(self):
+        pass
+
+    def _on_search(self, keyword: str):
+        """Handle search action"""
+        if keyword.strip():
+            platform = self.platformComboBox.currentText()
+            self.searchRequested.emit(keyword, platform)
+
+    def clear_search(self):
+        """Clear search input"""
+        self.searchInput.clear()
