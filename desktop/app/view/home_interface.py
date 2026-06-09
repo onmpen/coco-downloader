@@ -22,9 +22,9 @@ from ..services.errors import (
 from ..services.music_search_service import search_music
 
 PAGE_SIZE = 20
-PAGED_PLATFORMS = {"cenguigui", "XCVTS", "海棠", "netease-official", "qq-official", "kugou"}
+PAGED_PLATFORMS = {"cenguigui", "XCVTS", "海棠", "netease", "qq-official", "kugou"}
 DOWNLOAD_ONLY_PLATFORMS = {"QQMP3", "力音", "爱听", "qqmp3", "livepoo", "aiting"}
-NETEASE_OFFICIAL_PLATFORMS = {"cenguigui", "netease-official"}
+NETEASE_OFFICIAL_PLATFORMS = {"cenguigui", "netease"}
 
 
 class MusicSearchThread(QThread):

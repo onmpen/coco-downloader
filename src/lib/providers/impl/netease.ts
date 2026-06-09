@@ -65,7 +65,7 @@ export type LyricLine = {
 
 export type NeteaseLyricData = {
   songid: string;
-  provider: 'netease-official';
+  provider: 'netease';
   lines: LyricLine[];
   lrc: string;
   tlyric?: string;
@@ -169,7 +169,7 @@ function parseLyricLines(lyric: string) {
 }
 
 export class NeteaseOfficialProvider implements MusicProvider {
-  name = 'netease-official';
+  name = 'netease';
   private deviceId = this.generateDeviceId();
 
   async search(query: string, limit = 20, offset = 0): Promise<MusicItem[]> {
@@ -240,7 +240,7 @@ export class NeteaseOfficialProvider implements MusicProvider {
 
     return {
       songid: id,
-      provider: 'netease-official',
+      provider: 'netease',
       lines: parseLyricLines(lrc),
       lrc,
       tlyric: typeof payload.tlyric?.lyric === 'string' ? payload.tlyric.lyric : undefined,

@@ -48,9 +48,9 @@ class SearchCard(SimpleCardWidget):
         self.platformComboBox.setFixedWidth(150)
         self.platformComboBox.setFixedHeight(40)
         self.platformComboBox.addItems([
-            self.tr("cenguigui"),
-            self.tr("XCVTS"),
-            self.tr("海棠"),
+            self.tr("音源1"),
+            self.tr("音源2"),
+            self.tr("音源3"),
             self.tr("歌曲宝"),
             self.tr("歌曲海"),
             self.tr("布谷"),
@@ -61,8 +61,8 @@ class SearchCard(SimpleCardWidget):
             self.tr("咪咕"),
             self.tr("力音"),
             self.tr("爱听"),
-            self.tr("煎饼酷狗"),
-            self.tr("煎饼酷我"),
+            self.tr("煎饼-1"),
+            self.tr("煎饼-2"),
         ])
         self.platformComboBox.setCurrentIndex(0)
 

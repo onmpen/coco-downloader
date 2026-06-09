@@ -89,7 +89,7 @@ function applyQualityChoice(item: MusicItem, value: string) {
     extra.qualityOptions?.find((option) => option.value === value) ||
     extra.qualityOptions?.[0];
   if (!match) return item;
-  if (item.provider === "netease-official") {
+  if (item.provider === "netease") {
     return {
       ...item,
       extra: {
@@ -127,7 +127,7 @@ function getQualityItems(items: MusicItem[]) {
 function buildUrlRequest(item: MusicItem) {
   const params = new URLSearchParams({
     id: item.id,
-    provider: item.provider || "netease-official",
+    provider: item.provider || "netease",
   });
   if (item.extra !== undefined) {
     params.set("extra", JSON.stringify(item.extra));
@@ -179,7 +179,7 @@ type PlayMode = "order" | "shuffle" | "single";
 const SEARCH_PAGE_SIZE = 20;
 
 const PROVIDER_OPTIONS = [
-  { id: "netease-official", name: "cenguigui" },
+  { id: "netease", name: "云音乐" },
   { id: "qq", name: "XCVTS" },
   { id: "kugou", name: "海棠" },
   { id: "gequbao", name: "歌曲宝" },
@@ -200,7 +200,7 @@ const PROVIDER_OPTIONS = [
 
 export default function Home() {
   const [query, setQuery] = useState("");
-  const [provider, setProvider] = useState("netease-official");
+  const [provider, setProvider] = useState("netease");
   const [providerMenuOpen, setProviderMenuOpen] = useState(false);
   const [results, setResults] = useState<MusicItem[]>([]);
   const [loading, setLoading] = useState(false);
@@ -453,7 +453,7 @@ export default function Home() {
 
     const params = new URLSearchParams({
       id: activeMusic.id,
-      provider: activeMusic.provider || "netease-official",
+      provider: activeMusic.provider || "netease",
     });
     if (activeMusic.extra !== undefined) {
       params.set("extra", JSON.stringify(activeMusic.extra));
@@ -515,7 +515,7 @@ export default function Home() {
       const response = await axios.get(`/api/download`, {
         params: {
           id: task.musicItem.id,
-          provider: task.musicItem.provider || 'netease-official',
+          provider: task.musicItem.provider || 'netease',
           filename: task.fileName,
           extra: task.musicItem.extra ? JSON.stringify(task.musicItem.extra) : undefined,
         },

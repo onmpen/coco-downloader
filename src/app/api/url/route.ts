@@ -13,7 +13,7 @@ function parseExtra(value: string | null) {
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const id = searchParams.get('id');
-  const providerName = searchParams.get('provider') || 'netease-official';
+  const providerName = searchParams.get('provider') || 'netease';
   const extra = parseExtra(searchParams.get('extra'));
 
   if (!id) {

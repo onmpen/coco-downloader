@@ -11,10 +11,10 @@ import { LivepooProvider } from './impl/livepoo';
 import { JianbinProvider } from './impl/jianbin';
 import { AitingProvider } from './impl/aiting';
 import { JooxProvider } from './impl/joox';
-import { NeteaseOfficialProvider } from './impl/netease-official';
+import { NeteaseOfficialProvider } from './impl/netease';
 
 const providers: Record<string, MusicProvider> = {
-  'netease-official': new NeteaseOfficialProvider(),
+  'netease': new NeteaseOfficialProvider(),
   qq: new QQProvider(),
   kugou: new KugouProvider(),
   gequbao: new GequbaoProvider(),
@@ -33,8 +33,8 @@ const providers: Record<string, MusicProvider> = {
   'jianbin-kuwo': new JianbinProvider('jianbin-kuwo', 'kuwo'),
 };
 
-export function getProvider(name: string = 'netease-official'): MusicProvider {
-  return providers[name] || providers['netease-official'];
+export function getProvider(name: string = 'netease'): MusicProvider {
+  return providers[name] || providers['netease'];
 }
 
 export function getAllProviders(): MusicProvider[] {

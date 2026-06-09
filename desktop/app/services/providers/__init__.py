@@ -16,7 +16,7 @@ from .qq_official import QQOfficialProvider
 from .qqmp3 import QQMp3Provider
 
 PROVIDERS: dict[str, MusicProvider] = {
-    "netease-official": NeteaseOfficialProvider(),
+    "netease": NeteaseOfficialProvider(),
     "qq-official": QQOfficialProvider(),
     "kugou": KugouProvider(),
     "gequbao": GequbaoProvider(),
@@ -37,7 +37,7 @@ PROVIDERS: dict[str, MusicProvider] = {
 }
 
 PROVIDER_DISPLAY_NAMES = {
-    "cenguigui": "netease-official",
+    "cenguigui": "netease",
     "XCVTS": "qq-official",
     "海棠": "kugou",
     "歌曲宝": "gequbao",
@@ -57,9 +57,9 @@ PROVIDER_DISPLAY_NAMES = {
 }
 
 
-def get_provider(name: str = "netease-official") -> MusicProvider:
+def get_provider(name: str = "netease") -> MusicProvider:
     provider_key = PROVIDER_DISPLAY_NAMES.get(name, name)
-    return PROVIDERS.get(provider_key) or PROVIDERS["netease-official"]
+    return PROVIDERS.get(provider_key) or PROVIDERS["netease"]
 
 
 def get_all_providers() -> list[MusicProvider]:

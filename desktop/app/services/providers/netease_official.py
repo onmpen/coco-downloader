@@ -104,7 +104,7 @@ def _eapi_decrypt(content: bytes) -> Any:
 
 
 class NeteaseOfficialProvider(MusicProvider):
-    name = "netease-official"
+    name = "netease"
 
     def __init__(self) -> None:
         self._http = ProviderHttpClient()

@@ -64,7 +64,7 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const id = searchParams.get("id");
   const filename = searchParams.get("filename");
-  const providerName = searchParams.get("provider") || "netease-official";
+  const providerName = searchParams.get("provider") || "netease";
   const extra = parseExtra(searchParams.get("extra"));
 
   if (!id) {

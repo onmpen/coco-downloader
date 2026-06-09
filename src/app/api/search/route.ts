@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
   }
 
   const resolvedProviderName =
-    providerName && providerName !== 'all' ? providerName : 'netease-official';
+    providerName && providerName !== 'all' ? providerName : 'netease';
   const provider = getProvider(resolvedProviderName);
   const items = await provider.search(q, limit, offset);
 
