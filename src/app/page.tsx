@@ -215,6 +215,8 @@ export default function Home() {
   const [playMode, setPlayMode] = useState<PlayMode>("order");
   const [shuffleOrder, setShuffleOrder] = useState<string[]>([]);
   const [shuffleIndex, setShuffleIndex] = useState(-1);
+  const handlePlayRef = useRef<(item: MusicItem) => void>(() => undefined);
+  const getNextIndexRef = useRef<() => number>(() => -1);
 
   const [searched, setSearched] = useState(false);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
@@ -413,6 +415,7 @@ export default function Home() {
       }
     }
   };
+  handlePlayRef.current = handlePlay;
 
   const handleSeek = (time: number) => {
     if (audioRef.current) {
@@ -696,6 +699,7 @@ export default function Home() {
     }
     return -1;
   };
+  getNextIndexRef.current = getNextIndex;
 
   const getPrevIndex = () => {
     if (!activeMusic) return -1;
@@ -753,9 +757,9 @@ export default function Home() {
         }
         return;
       }
-      const nextIndex = getNextIndex();
+      const nextIndex = getNextIndexRef.current();
       if (nextIndex >= 0) {
-        handlePlay(results[nextIndex]);
+        handlePlayRef.current(results[nextIndex]);
       } else {
         setPlaying(false);
       }
@@ -770,7 +774,7 @@ export default function Home() {
       audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
       audio.removeEventListener('ended', handleEnded);
     };
-  }, [playing, playMode, results, activeMusic, shuffleIndex, shuffleOrder, getNextIndex, handlePlay]);
+  }, [playing, playMode, results]);
 
   return (
     <main className="min-h-[calc(100vh-64px)] bg-[#fcf9f8] text-[#1b1b1c] selection:bg-[#d3e3ff] selection:text-[#001c39] pb-36 transition-colors duration-300 dark:bg-[#111315] dark:text-[#f3f0ef]">
