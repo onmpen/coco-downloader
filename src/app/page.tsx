@@ -228,11 +228,17 @@ export default function Home() {
   const [qualityModal, setQualityModal] = useState<QualityModalState | null>(null);
   const [selectedQualityValue, setSelectedQualityValue] = useState("");
   const [playerDrawerOpen, setPlayerDrawerOpen] = useState(false);
+  const [playerDrawerSession, setPlayerDrawerSession] = useState(0);
   const [lyricLines, setLyricLines] = useState<LyricLine[]>([]);
   const [lyricLoading, setLyricLoading] = useState(false);
   const [hasMoreResults, setHasMoreResults] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const activeProviderName = PROVIDER_OPTIONS.find((option) => option.id === provider)?.name || "选择渠道";
+
+  const openPlayerDrawer = () => {
+    setPlayerDrawerSession((session) => session + 1);
+    setPlayerDrawerOpen(true);
+  };
 
   const openSourceUrl = async (item: MusicItem) => {
     const res = await fetch(buildUrlRequest(item));
@@ -906,27 +912,12 @@ export default function Home() {
                 exit={{ opacity: 0 }}
                 className="mb-24"
               >
-                <div className="mb-6 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+                <div className="mb-6">
                   <div>
                     <h2 className="text-[28px] font-bold leading-9 text-[#1b1b1c] md:text-[32px] md:leading-10 dark:text-[#f3f0ef]">搜索结果</h2>
                     <p className="mt-1 text-sm leading-5 text-[#404752] dark:text-[#c6c6c7]">
                       找到 {results.length} 首相关歌曲
                     </p>
-                  </div>
-                  <div className="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0">
-                    {["全部", "可播放", "可下载"].map((label, index) => (
-                      <button
-                        key={label}
-                        className={cn(
-                          "whitespace-nowrap rounded-full border px-4 py-1.5 text-xs font-medium transition-colors",
-                          index === 0
-                            ? "border-transparent bg-[#0078d4] text-white"
-                            : "border-[#c0c7d4] bg-white text-[#404752] hover:bg-[#e5e2e1]/50 dark:border-white/10 dark:bg-[#242526] dark:text-[#c6c6c7] dark:hover:bg-[#303030]"
-                        )}
-                      >
-                        {label}
-                      </button>
-                    ))}
                   </div>
                 </div>
 
@@ -1239,12 +1230,13 @@ export default function Home() {
             onSeek={handleSeek}
             volume={volume}
             onVolumeChange={setVolume}
-            onOpenPlayer={() => setPlayerDrawerOpen(true)}
+            onOpenPlayer={openPlayerDrawer}
           />
         )}
       </AnimatePresence>
 
       <FullscreenPlayerDrawer
+        key={`${activeMusic?.id || "empty"}-${playerDrawerSession}`}
         isOpen={playerDrawerOpen}
         music={activeMusic}
         isPlaying={playing}
